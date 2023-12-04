@@ -20,6 +20,7 @@ def create_parser():
     import argparse
     parser = argparse.ArgumentParser(description='QAG evaluation.')
     parser.add_argument('-m', '--model', default=None, type=str)
+    parser.add_argument('-c','--cache-dir', default=None, type=str)
     parser.add_argument('--model-ae', default=None, type=str)
     parser.add_argument('--max-length', default=512, type=int, help='')
     parser.add_argument('--max-length-output', default=256, type=int, help='')
@@ -42,7 +43,7 @@ def create_parser():
     return parser
 
 
-def evaluate_qag(model, model_ae, max_length, max_length_output, dataset_path, dataset_name, test_split, validation_split, n_beams, batch_size, language, use_auth_token, device_map, low_cpu_mem_usage, export_dir, hyp_test, hyp_dev, overwrite_prediction, overwrite_metric, use_reference_answer):
+def evaluate_qag(model,cache_dir, model_ae, max_length, max_length_output, dataset_path, dataset_name, test_split, validation_split, n_beams, batch_size, language, use_auth_token, device_map, low_cpu_mem_usage, export_dir, hyp_test, hyp_dev, overwrite_prediction, overwrite_metric, use_reference_answer):
     os.makedirs(export_dir, exist_ok=True)
     metrics = [
         (QAAlignedF1Score(target_metric='f1', base_metric='bertscore', language=language),
@@ -66,8 +67,8 @@ def evaluate_qag(model, model_ae, max_length, max_length_output, dataset_path, d
 
     def load_model():
         if model is not None:
-
             _model = TransformersQG(model,
+                                    cache_dir = cache_dir,
                                     # is_ae=None if is_ae else True,
                                     # is_qg=None if is_qg else True,
                                     is_qag=True,
@@ -184,7 +185,7 @@ def run_evaluation(args_list=None):
     parser = create_parser()
     args = parser.parse_args(args_list)
 
-    evaluate_qag(args.model, args.model_ae, args.max_length, args.max_length_output, args.dataset_path, args.dataset_name, args.test_split, args.validation_split, args.n_beams, args.batch_size, args.language, args.use_auth_token, args.device_map, args.low_cpu_mem_usage, args.export_dir, args.hyp_test, args.hyp_dev, args.overwrite_prediction, args.overwrite_metric, args.use_reference_answer)
+    evaluate_qag(args.model,args.cache_dir, args.model_ae, args.max_length, args.max_length_output, args.dataset_path, args.dataset_name, args.test_split, args.validation_split, args.n_beams, args.batch_size, args.language, args.use_auth_token, args.device_map, args.low_cpu_mem_usage, args.export_dir, args.hyp_test, args.hyp_dev, args.overwrite_prediction, args.overwrite_metric, args.use_reference_answer)
 
 # Example usage in a Jupyter Notebook
 # args_list = ["-m", "lmqg/t5-large-squad-qag", "-e", "./weird_dir", "-d", "lmqg/qg_squad", "-l", "en"]
