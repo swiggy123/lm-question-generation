@@ -121,9 +121,9 @@ def evaluate_qag(model, model_ae, max_length, max_length_output, dataset_path, d
         model_highlight = []
         for paragraph, g in df.groupby("paragraph"):
             model_input.append(paragraph)
-            model_highlight.append(g['answer'].tolist())
+            model_highlight.append(g['answers_text'].tolist())
             gold_reference.append(' | '.join([
-                f"question: {i['question']}, answer: {i['answer']}" for _, i in g.iterrows()
+                f"question: {i['question']}, answer: {i['answers_text']}" for _, i in g.iterrows()
             ]))
         prediction = None
         if not overwrite_prediction and os.path.exists(_file):
