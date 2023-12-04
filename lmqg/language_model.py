@@ -289,10 +289,10 @@ class TransformersQG:
             model = DEFAULT_MODELS[language]
 
         # classify model type
-        self.is_qg = 'qg' in model.split('-') if is_qg is None else is_qg
-        self.is_ae = 'ae' in model.split('-') if is_ae is None else is_ae
-        self.is_qa = 'qa' in model.split('-') if is_qa is None else is_qa
-        self.is_qag = 'qag' in model.split('-') if is_qag is None else is_qag
+        self.is_qg = False
+        self.is_ae = False
+        self.is_qa = False
+        self.is_qag = True
 
         # configs
         self.model_name = model
