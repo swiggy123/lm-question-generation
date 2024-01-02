@@ -116,7 +116,7 @@ def compute_metrics(out_file,
     scorers = [(Bleu(4), ["Bleu_1", "Bleu_2", "Bleu_3", "Bleu_4"])]
     if not bleu_only:
         scorers_extra = [
-            (Meteor(), "METEOR"),
+            #(Meteor(), "METEOR"),
             (Rouge(), "ROUGE_L"),
             (BERTScore(language=language), "BERTScore"),
             (MoverScore(language=language), 'MoverScore')
